@@ -1,52 +1,324 @@
-# Prerequisites
-*.d
+#include<stdio.h>
+#include<stdlib.h>
+#include<conio.h>
+struct node
+{
+    char name[20];
+    int id;
+    float cgpa;
+    struct node *next;
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+};
+typedef struct node node;
+node *head;
+void createlist();
+void display();
+void insert_begining();
+void insert_end();
+void delete();
+void insert_position();
+int count();
+int scarch_node();
+void edit();
+void delete();
 
-# Linker output
-*.ilk
-*.map
-*.exp
 
-# Precompiled Headers
-*.gch
-*.pch
+int main()
+{
+    int a;
+    while(1)
+    {
+        printf("\nMain Manu :\n\n");
+        printf("1. Create List\t\t\t2. Display List\n\n");
+        printf("3. Insert Begining\t\t4. Insert End\n\n");
+        printf("5. Insert Position\t\t6. Node Count\n\n");
+        printf("7. Scarch & Edit & Delete\t8. Exit\n\n");
+        printf("Enter your Choice :");
+        scanf("%d",&a);
+        printf("\n");
+        switch(a)
+        {
+            case 1:
+            createlist();
+            break;
+            case 2:
+            display();
+            break;
+            case 3:
+            insert_begining();
+            break;
+            case 4:
+            insert_end();
+            break;
+            case 5:
+            insert_position();
+            break;
+            case 6:
+            printf("This List has %d nodes\n",count());
+            printf("\nPress any key to go to Main Menu\n");
+            getch();
+            break;
+            case 7:
+            scarch_node();
+            break;
+            case 8:
+            return 0;
+            default:
+            printf("Invalid Choice\n");
+            printf("Press any key to go to Main Menu");
+            getch();
+            break;
+        }
+    }
+}
+void createlist()
+{
+    int n;
+    printf("How many node you wnat to create in this list : ");
+    scanf("%d",&n);
+    node *newnode,*temp;
+    head = (node*)malloc(sizeof(node));
+    printf("Name : ");
+    fflush(stdin);
+    gets((head)->name);
+    printf("ID :");
+    scanf("%d",&head->id);
+    printf("CGPA :");
+    scanf("%f",&(head)->cgpa);
+    head->next=NULL;
+    temp=head;
+    for(int i=1; i<n; i++)
+    {
+        newnode=(node*)malloc(sizeof(node));
+        printf("Name :");
+        fflush(stdin);
+        gets((newnode)->name);
+        printf("ID :");
+        scanf("%d",&newnode->id);
+        printf("CGPA :");
+        scanf("%f",&(newnode)->cgpa);
+        newnode->next=NULL;
+        temp->next=newnode;
+        temp=temp->next;
+    }
+    printf("\nlist created successfully\n\nPress any key to go to Main Memu\n");
+    getch();
+}
+void display()
+{
+    node *temp;
+    temp=head;
+    printf("\tName\t\tID\tCGPA\n");
+    int i=1;
+    while(temp!=NULL)
+    {
+        printf("%d. ",i);
+        printf("%s      ",temp->name);
+        printf("\t%d\t",temp->id);
+        printf("%.2f\n",temp->cgpa);
+        temp=temp->next;
+        i++;
+    }
+    printf("\nPress any key to go to Main Menu\n");
+    getch();
+}
+void insert_begining()
+{
+    node *newnode;
+    newnode=(node*)malloc(sizeof(node));
+        printf("Name :");
+        fflush(stdin);
+        gets((newnode)->name);
+        printf("ID :");
+        scanf("%d",&newnode->id);
+        printf("CGPA :");
+        scanf("%f",&(newnode)->cgpa);
+        newnode->next=head;
+        head=newnode;
+        printf("\n\nNew node added to the top of this list\n");
+        printf("\nPress any key to go to Main Menu\n");
+        getch();
+}
+void insert_end()
+{
+    node *newnode,*temp;
+    newnode=(node*)malloc(sizeof(node));
+        printf("Name :");
+        fflush(stdin);
+        gets((newnode)->name);
+        printf("ID :");
+        scanf("%d",&newnode->id);
+        printf("CGPA :");
+        scanf("%f",&(newnode)->cgpa);
+        newnode->next=NULL;
+        temp=head;
+        while(temp->next!=NULL)
+        {
+            temp=temp->next;
+        }
+        temp->next=newnode;
+        printf("\n\nNew node added successfully to the end of this list\n");
+        printf("\nPress any key to go to Main Menu\n");
+        getch();        
+}
+void insert_position()
+{
+    int p;
+    printf("Enter the position :");
+    scanf("%d",&p);
+    if(p==1)
+    {
+        insert_begining();
+    }
+    else if(p>count())
+    {
+        insert_end();
+    }
+    else
+    {
+        printf("\n");
+        node *newnode,*temp;
+        newnode=(node*)malloc(sizeof(node));
+        printf("Name :");
+        fflush(stdin);
+        gets((newnode)->name);
+        printf("ID :");
+        scanf("%d",&newnode->id);
+        printf("CGPA :");
+        scanf("%f",&(newnode)->cgpa);
+        newnode->next=NULL;
+        temp=head;
+        for(int i=2; i<p; i++)
+        {
+            temp=temp->next;
+        }
+        newnode->next=temp->next;
+        temp->next=newnode;
+        printf("\n\nNew node added successfully\n");
+    }
+    printf("\nPress any key to go to Main Menu\n");
+    getch();
+}
+int count()
+{
+    node *temp;
+    temp=head;
+    int c=0;
+    while(temp!=NULL)
+    {
+        temp=temp->next;
+        c++;
+    }
+    return c;
+}
+int scarch_node()
+{
+    int id;
+    printf("Enter ID :");
+    scanf("%d",&id);
+    node *temp;
+    temp=head;
+    while(temp!=NULL && temp->id!=id)
+    {
+        temp=temp->next;
+    }
+    if(temp==NULL)
+    {
+        printf("Node not found\n");
+        printf("\nPress any key to go to Main Menu\n");
+        getch();
+        return 0;
+    }
+    else
+    {
+        printf("\n\tName\t\tID\tCGPA\n");
+        printf("1. ");
+        printf("%s      ",temp->name);
+        printf("\t%d\t",temp->id);
+        printf("%.2f\n\n",temp->cgpa);
+    }
+    while(1)
+    {
+    int a;
+    printf("1. Edit\t\t2. Delete\n\n3. Main menu\n");
+    scanf("%d",&a);
+    switch(a)
+    {
+        case 1:
+        edit(temp);
+        return 0;
+        case 2:
+        delete(temp);
+        return 0;
+        case 3:
+        return 0;
+        default :
+        printf("Invalid choice\n");
+        break;
+    }
+    }
+}
+void edit(node *temp)
+{
+    printf("Do you want to edit Name\n\n");
+    printf("1. Yes\t2. No\n");
+    int b;
+    scanf("%d",&b);
+    if(b==1)
+    {
+        printf("Write new name :");
+        fflush(stdin);
+        gets(temp->name);
+    }
+    printf("Do you want to edit ID\n\n");
+    printf("1. Yes\t2. No\n");
+    int c;
+    scanf("%d",&c);
+    if(c==1)
+    {
+        printf("Write new ID :");
+        scanf("%d",&temp->id);
+    }
+    printf("Do you want to edit CGPA\n\n");
+    printf("1. Yes\t2. No\n");
+    int d;
+    scanf("%d",&d);
+    if(d==1)
+    {
+        printf("Write new CGPA :");
+        scanf("%f",&temp->cgpa);
+    }
+    printf("Done\n");
+    printf("\nPress any key to go to Main Menu\n");
+    getch();
+}
+void delete(node *p)
+{
+    node *temp,*q;
+    temp=head;
+    if(p==head)
+    {
+        head=temp->next;
+        free(temp);
+        temp=NULL;
+        printf("Node deleted successfully\n");
+        printf("\nPress any key to go to Main Menu\n");
+        getch();
+    }
+    else
+    {
+        q=temp->next;
+        while(q->id!=p->id)
+        {
+            temp=q;
+            q=temp->next;
+        }
+        temp->next=q->next;
+        free(q);
+        q=NULL;
+        printf("Node deleted successfully\n");
+        printf("\nPress any key to go to Main Menu\n");
+        getch();
+    }
+}
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
